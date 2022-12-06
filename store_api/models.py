@@ -16,29 +16,44 @@ SIZE_CHOICES = [
 class Category(models.Model):
     name = models.CharField(max_length=100, null=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
     price = models.FloatField(null=False)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class ProductSize(models.Model):
-    size = models.CharField(choices=SIZE_CHOICES, null=False, blank=False)
+    size = models.CharField(choices=SIZE_CHOICES,
+                            max_length=2, null=False, blank=False)
     amount = models.IntegerField(null=False, blank=False)
-    product = models.ManyToOneRel(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.product.name} {self.size}"
+
+
+class OrderProductSize(models.Model):
+    product_size = models.ForeignKey(ProductSize, on_delete=models.CASCADE)
+    amount_in_order = models.IntegerField(null=False)
+
+    def __str__(self):
+        return f"{self.product_size} ({self.amount_in_order} szt)"
 
 class Order(models.Model):
-    user = models.ForeignKey(models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-    ))
-    products = models.ManyToManyRel(ProductSize)
-    # sprawdzic czy potrzebne w ogole
-    total_amount = models.FloatField()
+    )
+    # products = models.ManyToManyField(ProductSize)
+    products = models.ManyToManyField(OrderProductSize, null=True)
 
 
-
-#reviews może
+# reviews może
