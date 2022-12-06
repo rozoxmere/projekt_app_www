@@ -1,0 +1,15 @@
+3-4 endpointy
+
+	1. Złożenie zamówienia
+	2. Filtrowanie/Przeszukiwanie sklepu (rozdzielić to ewentualnie)
+	3. Zmiana statusu zamownienia / wyświetlania po danym statusie 
+	
+	
+
+
+
+serlializery
+
+walidacja danych
+
+uwierzytelnianie
