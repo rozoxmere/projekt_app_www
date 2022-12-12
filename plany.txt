@@ -8,7 +8,7 @@
 
 
 
-serlializery
+serlializery (Customowe metody dodawani trzeba zrobic)
 
 walidacja danych
 
