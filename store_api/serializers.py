@@ -41,19 +41,37 @@ class OrderProductSizeSerializer(serializers.ModelSerializer):
 
 
 
+# class OrderSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Order
+#         fields = ["user", "orderProductSize", "order_date"]
+
+#     orderProductSize = OrderProductSizeSerializer(many=True)
+
+#     def create(self, validated_data):
+#         products_data = validated_data.pop("orderProductSize")
+#         order = Order.objects.create(**validated_data)
+#         for product_data in products_data:
+#             print(product_data)
+#             self.set([product_data])
+#             OrderProductSize.objects.create(**product_data)
+#         return order
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["user", "orderProductSize", "order_date"]
 
-    orderProductSize = OrderProductSizeSerializer(many=True)
-
     def create(self, validated_data):
-        products_data = validated_data.pop("orderProductSize")
-        order = Order.objects.create(**validated_data)
+        bought_products = validated_data["orderProductSize"]
+        flags = 0
+        for element in bought_products:
+            print(f"Id : {element.product_size.id} {element.product_size.amount} |||| {element.amount_in_order} ")
+            difference = element.product_size.amount - element.amount_in_order
+            if difference < 0:
+                flags = 1
+        if flags is not 1:
+            for element in bought_products:
+                ProductSize.objects.get(pk=element.product_size.id).amount = element.product_size.amount - element.amount_in_order
 
-        for product_data in products_data:
-            print(product_data)
-            self.set([product_data])
-            OrderProductSize.objects.create(**product_data)
-        return order
+        return validated_data

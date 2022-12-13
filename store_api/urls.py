@@ -22,7 +22,21 @@ urlpatterns = [
     path('productsize/', productSize_create),
     path('productsize/<int:pk>/delete', productSize_delete),
 
+
+    path('orderProductsize_list/', orderProductSize_list),
+    path('orderProductsize/<int:pk>/', orderProductSize_detail),
+    path('orderProductsize/<int:pk>/update', orderProductSize_update),
+    path('orderProductsize/', orderProductSize_create),
+    path('orderProductsize/<int:pk>/delete', orderProductSize_delete),
+
+    path('order_list/', order_list),
+    path('order/<int:pk>/', order_detail),
+    path('order/<int:pk>/update', order_update),
     path('order/', order_create),
+    path('order/<int:pk>/delete', order_delete),
+
+
+    # path('order/', order_create),
 
 
 
