@@ -135,3 +135,69 @@ def product_filter(request, name, id):
     if request.method == "GET":
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+
+
+# PRODUCTSIZE
+
+@api_view(["GET"])
+def productSize_list(request, product_id):
+    if request.method == "GET":
+        productSizes = ProductSize.objects.filter(product=product_id)
+        serializer = ProductSizeSerializer(productSizes, many=True)
+        return Response(serializer.data)
+
+@api_view(["GET"])
+def productSize_detail(request, pk):
+    if request.method == "GET":
+        try:
+            productSize = ProductSize.objects.get(pk=pk)
+        except ProductSize.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductSizeSerializer(productSize)
+        return Response(serializer.data)
+
+@api_view(["PUT"])
+def productSize_update(request, pk):
+    try:
+        productSize = ProductSize.objects.get(pk=pk)
+    except ProductSize.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "PUT":
+        serializer = ProductSizeSerializer(productSize, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def productSize_create(request):
+    if request.method == "POST":
+        serializer = ProductSizeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+def productSize_delete(request, pk):
+    try:
+        productSize = ProductSize.objects.get(pk=pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "DELETE":
+        productSize.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+# order
+@api_view(["POST"])
+def order_create(request):
+    if request.method == "POST":
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
