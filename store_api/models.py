@@ -48,6 +48,7 @@ class ProductSize(models.Model):
 class OrderProductSize(models.Model):
     product_size = models.ForeignKey(ProductSize, on_delete=models.CASCADE)
     amount_in_order = models.IntegerField(null=False)
+    # order = models.ForeignKey(Order)
 
     def __str__(self):
         return f"{self.product_size} ({self.amount_in_order} szt)"
@@ -57,8 +58,7 @@ class Order(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    # products = models.ManyToManyField(ProductSize)
-    products = models.ManyToManyField(OrderProductSize, null=False, blank=False)
+    orderProductSize = models.ManyToManyField(OrderProductSize, null=False, blank=False)
     order_date = models.DateTimeField(default=datetime.now)
 
     class Meta:

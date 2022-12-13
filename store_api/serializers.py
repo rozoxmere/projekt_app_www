@@ -35,11 +35,25 @@ class ProductSizeSerializer(serializers.ModelSerializer):
 
 class OrderProductSizeSerializer(serializers.ModelSerializer):
     class Meta:
-        models = OrderProductSize
-        fields = ["product_size", "amount_in_order"]
+        model = OrderProductSize
+        fields = ["product_size", "amount_in_order",]
         read_only_fields = ["id"]
+
+
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ["user", "products", "order_date"]
+        fields = ["user", "orderProductSize", "order_date"]
+
+    orderProductSize = OrderProductSizeSerializer(many=True)
+
+    def create(self, validated_data):
+        products_data = validated_data.pop("orderProductSize")
+        order = Order.objects.create(**validated_data)
+
+        for product_data in products_data:
+            print(product_data)
+            self.set([product_data])
+            OrderProductSize.objects.create(**product_data)
+        return order

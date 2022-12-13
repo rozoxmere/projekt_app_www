@@ -10,7 +10,7 @@
 
 serlializery (Customowe metody dodawani trzeba zrobic)
 
-walidacja danych
+walidacja danych (czy dla konkretnego produktu jest dany rozmiar)
 
 uwierzytelnianie
 
