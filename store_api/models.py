@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from datetime import datetime    
 
 # Create your models here.
 
@@ -18,6 +19,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
 
 
 class Product(models.Model):
@@ -54,6 +59,8 @@ class Order(models.Model):
     )
     # products = models.ManyToManyField(ProductSize)
     products = models.ManyToManyField(OrderProductSize, null=True)
+    order_date = models.DateTimeField(default=datetime.now)
 
-
+    class Meta:
+        get_latest_by = ["order_date"]
 # reviews może
