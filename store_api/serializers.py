@@ -13,6 +13,13 @@ class CategorySerializer(serializers.Serializer):
         instance.save()
         return instance
 
+    def validate_name(self, value):
+        if not value.istitle():
+            raise serializers.ValidationError(
+                "Nazwa categorii powinna zaczynać się z dużej litery!"
+            )
+        return value
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product

@@ -15,7 +15,7 @@ SIZE_CHOICES = [
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, null=False)
+    name = models.CharField(max_length=100, null=False, unique=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +58,7 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
     # products = models.ManyToManyField(ProductSize)
-    products = models.ManyToManyField(OrderProductSize, null=True)
+    products = models.ManyToManyField(OrderProductSize, null=False, blank=False)
     order_date = models.DateTimeField(default=datetime.now)
 
     class Meta:

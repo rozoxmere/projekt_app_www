@@ -13,3 +13,5 @@ serlializery (Customowe metody dodawani trzeba zrobic)
 walidacja danych
 
 uwierzytelnianie
+
+permisje
