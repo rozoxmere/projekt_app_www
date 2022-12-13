@@ -5,6 +5,7 @@ from .models import *
 from .serializers import *
 
 # Create your views here.
+# CATEGORY
 
 @api_view(["GET"])
 def category_list(request):
@@ -67,4 +68,70 @@ def category_filter(request, name):
 
     if request.method == "GET":
         serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+# PRODUCT
+
+@api_view(["GET"])
+def product_list(request):
+    if request.method == "GET":
+        poducts = Product.objects.all()
+        serializer = ProductSerializer(poducts, many=True)
+        return Response(serializer.data)
+
+@api_view(["GET"])
+def product_detail(request, pk):
+    if request.method == "GET":
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+@api_view(["PUT"])
+def product_update(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "PUT":
+        serializer = ProductSerializer(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def product_create(request):
+    if request.method == "POST":
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+def product_delete(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "DELETE":
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["GET"])
+def product_filter(request, name, id):
+    try:
+        products = Product.objects.filter(name__contains=name)
+        if id != 0:
+            products = products.filter(category=id)
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
