@@ -73,5 +73,5 @@ class OrderSerializer(serializers.ModelSerializer):
         if flags is not 1:
             for element in bought_products:
                 ProductSize.objects.get(pk=element.product_size.id).amount = element.product_size.amount - element.amount_in_order
-
-        return validated_data
+        order = OrderProductSize.objects.create(**validated_data)
+        return order
